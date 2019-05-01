@@ -87,6 +87,18 @@ defmodule Agala.Provider.Telegram.Helpers do
     |> perform_request()
   end
 
+  def send_message_with_reply_markup(conn, chat_id, message, reply_markup, opts \\ []) do
+    Map.put(conn, :response, %Response{
+      method: :post,
+      payload: %{
+        url: base_url("/sendMessage"),
+        body: create_body(%{chat_id: chat_id, text: message, reply_markup: reply_markup}, opts),
+        headers: [{"Content-Type", "application/json"}]
+      }
+    })
+    |> perform_request()
+  end
+
   @spec delete_message(
           conn :: Agala.Conn.t(),
           chat_id :: String.t() | integer,
